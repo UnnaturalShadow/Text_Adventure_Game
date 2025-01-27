@@ -1,3 +1,12 @@
+/**
+ * The Writer class is meant to work almost identically to a 'cout << "text" << endl;' call, except It
+ * "type-writes" the line instead of simply printing it. The effect is that it looks like the lines are being 
+ * actually typed to the screen instead of simply appearing there. There is also a method to clear the terminal screen.
+ *
+ * @author Joshua Decker
+ * @version 1.40.00
+ */
+
 #pragma once
 
 #include <iostream>
@@ -12,6 +21,15 @@ class Writer {
 public:
     static bool testing;
     static int speed;
+
+    static void printlnJava(const std::string& sentence)
+    {
+        cout << sentence << endl;
+    }
+    static void printJava(const std::string& sentence)
+    {
+        cout << sentence;
+    }
 
     static void println(const std::string& sentence) {
         setSpeed();

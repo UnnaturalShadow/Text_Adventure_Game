@@ -1,0 +1,2 @@
+Currently your Help, LevelOne, and Pause classes have a lot of things commented out. You will need to go back and fix that once the pieces that are missing 
+and thus causing problems are implemented. 

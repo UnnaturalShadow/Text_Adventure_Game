@@ -78,7 +78,7 @@ public:
     {
         if(newArmor.getType() == ("helmet"))
         {
-            if(helmetHas < maxOfType)
+            if(helmetHas < maxOfType) 
             {
                 helmets[helmetHas] = newArmor;
                 helmetHas++;
