@@ -8,6 +8,7 @@
 #include "Levels.h"
 #include "Player.h"
 #include "Combat.h"
+#include "SaveGame.h"
 
 using namespace std;
 
@@ -23,9 +24,11 @@ public:
     Player* player;
     Combat* fight;
     Pause* pause;
+    SaveGame* save;
 
-    LevelOne(Player* p, Pause* pa)
-    :player(p), pause(pa)
+
+    LevelOne(Player* p, Pause* pa, SaveGame* s)
+    :player(p), pause(pa), save(s)
     {
         fight = new Combat(player);
     }
@@ -189,7 +192,7 @@ public:
             }
             else if(nextAction == "Save" || nextAction == "save")
             {
-                // SaveGame.newSave(player, level, placeCounter, timesSaved);
+                save->newSave(level, placeCounter, timesSaved);
                 Wait::stall(1000);
 
             }
@@ -224,7 +227,7 @@ public:
             Wait::stall(567);
             if(isWeaponEquipped == true)
             {
-                // Writer::println("You brandish your " + to_string(weaponEquipped.getType()) + " and step towards the darkness.");
+                Writer::println("You brandish your " + weaponEquipped.getType() + " and step towards the darkness.");
             }
             else
             {
@@ -240,7 +243,7 @@ public:
         {
             haveYouGoneSouth = true;
             placeCounter++;
-            // swordOfTheSouth.setLevel(player->getLevel());
+            swordOfTheSouth->setLevel(player->getLevel());
             Writer::wipeScreen();
             Writer::println("You notice a rusted piece of metal lodged in an aging stump...");
             Wait::stall(789);
@@ -269,10 +272,11 @@ public:
             Wait::stall(2500);
             Writer::printlnJava("");
 
-            Enemy goblin = Enemy("Goblin", "monster", player->getLevel());
+            Enemy* goblin = new Enemy("Goblin", "monster", player->getLevel());
             fight->newEncounter(goblin);
             Wait::stall(2000);
             Writer::wipeScreen();
+            delete goblin;
             firstChoice();
 
         }

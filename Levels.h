@@ -4,6 +4,8 @@
 #include <cstdlib> 
 #include <ctime>
 #include "Writer.h"
+// #include "Weapon.h"
+#include "WeaponInventory.h"
 
 using namespace std;
 
@@ -23,6 +25,8 @@ public:
     int triedAttack = 0;
     bool inCombat = false;
     bool isWeaponEquipped;
+    Weapon weaponEquipped = Weapon("Fists", "Fists", 0);
+    Weapon* swordOfTheSouth = new Weapon("Sword of The South", "sword", 0);
     int chanceToFlee = 20;
     bool startFromSave = false;
     bool hasBeenHelped = false;

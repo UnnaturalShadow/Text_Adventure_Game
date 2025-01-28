@@ -12,8 +12,11 @@
 #include <iostream>
 #include "Levels.h"
 #include "Player.h"
+#include <filesystem>
 
 using namespace std;
+namespace fs = std::filesystem;
+
 
 class SaveGame : public Levels {
 private:
@@ -34,10 +37,12 @@ public:
 
     void newSave(int level, int place, int numSaves) {
         int saves = numSaves + 1;
-        std::string filePath = "\\Saves\\TAG_Save_" + std::to_string(saves) + ".txt";
+        fs::path currentDir = fs::current_path();
+        fs::path savesPath = currentDir / "Saves";
+        fs::path saveFile = currentDir / "Saves" / ("TAG_Save_" + to_string(saves) + ".txt");
 
         // Create the file
-        std::ofstream file(filePath);
+        std::ofstream file(saveFile);
         if (!file) {
             std::cerr << "An error occurred while creating the save file." << std::endl;
             return;
@@ -53,26 +58,46 @@ public:
     }
 
     //modify this to simply pull the highest number?
-    std::string findSave() {
-        std::string highestSave;
-        std::cout << "What is the most recent save name? ";
-        std::cin >> highestSave;
+   std::string findSave() {
+    std::string highestSave;
+    fs::path currentDir = fs::current_path();
+    fs::path savesPath = currentDir / "Saves";
+    int highest = 0;
 
-        highestSave = highestSave + ".txt";
+    try {
+        // Iterate through the directory
+        for (const auto& entry : fs::directory_iterator(savesPath)) {
+            std::string filename = entry.path().filename().string();
 
-        std::ifstream file(highestSave);
-        if (!file) {
-            std::cerr << "You have no saved games. Please start from the beginning." << std::endl;
-            return "";
+            // Ensure the file name matches the expected format (e.g., TAG_Save_X.txt)
+            if (filename.substr(0, 9) == "TAG_Save_" && filename.size() > 10) {
+                int saveNumber = std::stoi(filename.substr(9, filename.size() - 13)); // Extract save number
+                if (saveNumber > highest) {
+                    highest = saveNumber;
+                }
+            }
         }
-
-        std::ostringstream buffer;
-        buffer << file.rdbuf();  // Read the entire file into a string
-        file.close();
-
-        std::cout << "Save found!" << std::endl;
-        return buffer.str();
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "Error accessing directory: " << e.what() << std::endl;
+        return "";
     }
+
+    // Construct the full path to the highest save file
+    highestSave = (savesPath / ("TAG_Save_" + std::to_string(highest) + ".txt")).string();
+
+    std::ifstream file(highestSave);
+    if (!file) {
+        std::cerr << "You have no saved games. Please start from the beginning." << std::endl;
+        return "";
+    }
+
+    std::ostringstream buffer;
+    buffer << file.rdbuf();  // Read the entire file into a string
+    file.close();
+
+    std::cout << "Save found: " << highestSave << std::endl;
+    return buffer.str();
+}
 
     int getLevel() const { return atLevel; }
     int getPlace() const { return atPlace; }

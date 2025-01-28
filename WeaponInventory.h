@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class WeaponInventory : public Levels{
+class WeaponInventory{
 private:
     vector<Weapon*> wepInt; // Dynamic inventory using a vector
     int inventoryCapacity;

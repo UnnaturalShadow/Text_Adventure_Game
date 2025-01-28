@@ -41,10 +41,10 @@ public:
             cout << player->toString() << endl;
 
             // Clear screen (platform-specific implementation may be needed)
-            cout << string(50, '\n');
+            Writer::wipeScreen();
         } else {
             // Clear screen
-            cout << string(50, '\n');
+            Writer::wipeScreen();
 
             // Type-prints a greeting
             Writer::println("Hello, and welcome to Ikarris!");
@@ -112,8 +112,13 @@ public:
                 Wait::stall(2000);
 
                 // Clear screen
-                cout << string(50, '\n');
+                Writer::wipeScreen();
             }
         }
+    }
+
+    bool savedGame()
+    {
+        return startFromSave;
     }
 };
